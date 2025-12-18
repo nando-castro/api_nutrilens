@@ -4,9 +4,12 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 
 import { AppModule } from './app.module';
+import { ensureGoogleCredentialsFile } from './shared/google/ensure-google-creds';
 import { PrismaService } from './shared/prisma/prisma.service';
 
 async function bootstrap() {
+  ensureGoogleCredentialsFile();
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalPipes(
