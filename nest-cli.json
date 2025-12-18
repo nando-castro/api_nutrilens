@@ -2,12 +2,9 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "deleteOutDir": true,
-    "outDir": "dist",
     "assets": [
       {
-        "include": "shared/nutrition/data/**/*",
-        "outDir": "dist"
+        "include": "shared/nutrition/data/**/*"
       }
     ],
     "watchAssets": true

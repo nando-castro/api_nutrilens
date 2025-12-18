@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "prisma generate && nest build",
+    "copy:nutrition": "node -e \"const fs=require('fs'); const path=require('path'); const src=path.join('src','shared','nutrition','data'); const dst=path.join('dist','src','shared','nutrition','data'); fs.mkdirSync(dst,{recursive:true}); fs.cpSync(src,dst,{recursive:true}); console.log('Copied nutrition data:', src, '->', dst);\"",
+    "build": "prisma generate && nest build && pnpm run copy:nutrition",
     "start": "node dist/src/main.js",
     "start:prod": "node dist/src/main.js",
     "start:dev": "nest start --watch",
