@@ -34,6 +34,82 @@ npx prisma migrate dev
 pnpm run start:dev
 ```
 
+## Variáveis de ambiente
+
+ - DATABASE_URL="postgresql://USER:PASS@HOST:PORT/DB"
+ - JWT_SECRET="secret"
+ - JWT_EXPIRES_IN="1d"
+ - GOOGLE_APPLICATION_CREDENTIALS="/home/user/credentials/nutrilens.json"
+
+
+## Estrutura do projeto
+
+ - src/auth (JWT, guards)
+ - src/meals (controller/service/dto)
+ - src/food (análise por imagem)
+ - src/shared/prisma (PrismaService)
+ - uploads/meals (arquivos salvos)
+
+ - src/screens/FoodAnalyzeScreen.tsx
+ - src/screens/MealsHistoryScreen.tsx
+ - src/layout/AppShell.tsx
+ - src/auth/auth.api.ts
+
+# Modelo de dados (resumo)
+
+ - User
+ - Meal
+ - MealItem
+   
+    Ver diagrama ER abaixo.
+
+## Endpoints principais (resumo)
+
+ - POST /auth/register
+ - POST /auth/login
+ - GET /meals?date=YYYY-MM-DD
+ - POST /meals (multipart: image + data)
+ - GET /meals/:id
+ - DELETE /meals/:id
+ - POST /food/analyze (multipart: file)
+
+    Ver documentação completa da API abaixo.
+
+# Telas e funcionalidades da aplicação:
+ - Tela de registro
+ - Tela de login
+ - Tela de análise
+ - Resultado da análise (lista de itens)
+ - Modal de adicionar alimento manual
+ - Histórico por dia
+ - Modal de detalhes da refeição
+
+## Vídeo demonstrativo
+
+Link: 
+
+## Decisões técnicas
+
+ - NestJS + Prisma: produtividade e segurança (ORM, migrations)
+ - Upload local via Multer: simples para ambiente acadêmico
+ - Histórico por dia via query date (performance e UX)
+ - DTOs e validação no backend para garantir consistência
+
+## Segurança implementada
+
+ - JWT (Bearer Token)
+ - Senhas com hash (bcrypt)
+ - Validações no backend (DTO)
+ - Controle de acesso por usuário (userId)
+
+## Melhorias futuras
+
+ - Metas diárias e gráficos semanais/mensais
+ - Macros (proteína/carb/gordura)
+ - Storage em S3/Cloudinary
+ - App mobile (React Native)
+ - Sugestões com IA (dieta/alertas)
+
 ---
 
 ## 2) Documentação completa da API
@@ -186,3 +262,39 @@ Recebe uma imagem e retorna itens detectados.
 -------------------------------------------------------------------------------------------------------------------
 
 ```
+
+## 3) Diagrama ER
+
+```md
+
+  USER {
+    uuid id
+    string name
+    string email
+    string passwordHash
+    datetime createdAt
+  }
+
+  MEAL {
+    uuid id
+    uuid userId
+    string type
+    datetime takenAt
+    string imagePath
+    int totalCalories
+    datetime createdAt
+    datetime updatedAt
+  }
+
+  MEAL_ITEM {
+    uuid id
+    uuid mealId
+    string name
+    int grams
+    int caloriesPer100g
+    int calories
+    float confidence
+    string source
+    datetime createdAt
+    datetime updatedAt
+  }
